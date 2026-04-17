@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema POS - JPA Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .hero {
+            text-align: center;
+            color: white;
+            padding: 60px 0;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+        }
+        .module-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .module-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .module-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .module-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .btn-module {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .btn-module:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            color: white;
+        }
+        .features h4 {
+            margin-bottom: 20px;
+        }
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .features li:last-child {
+            border-bottom: none;
+        }
+        .features i {
+            margin-right: 10px;
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-shop"></i> Sistema POS - JPA Demo
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/"><i class="bi bi-house"></i> Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clientes"><i class="bi bi-people"></i> Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/proveedores"><i class="bi bi-truck"></i> Proveedores</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productos"><i class="bi bi-box-seam"></i> Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/compras"><i class="bi bi-cart-plus"></i> Compras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ventas"><i class="bi bi-cash-coin"></i> Ventas</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1><i class="bi bi-shop"></i> Sistema POS</h1>
+            <p>Demostración de Relaciones JPA con Spring Boot</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="module-card text-center">
+                    <div class="module-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3>Clientes</h3>
+                    <p>Gestiona la información de tus clientes. Relación @OneToMany con Ventas.</p>
+                    <a href="/clientes" class="btn-module">
+                        <i class="bi bi-arrow-right-circle"></i> Gestionar
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="module-card text-center">
+                    <div class="module-icon">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <h3>Proveedores</h3>
+                    <p>Administra tus proveedores. Relación @OneToMany con Compras.</p>
+                    <a href="/proveedores" class="btn-module">
+                        <i class="bi bi-arrow-right-circle"></i> Gestionar
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="module-card text-center">
+                    <div class="module-icon">
+                        <i class="bi bi-box-seam-fill"></i>
+                    </div>
+                    <h3>Productos</h3>
+                    <p>Catálogo de productos. Relaciones @OneToMany con Detalles de Compra y Venta.</p>
+                    <a href="/productos" class="btn-module">
+                        <i class="bi bi-arrow-right-circle"></i> Gestionar
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="module-card text-center">
+                    <div class="module-icon">
+                        <i class="bi bi-cart-plus-fill"></i>
+                    </div>
+                    <h3>Compras</h3>
+                    <p>Registra compras a proveedores. Relación @ManyToOne con Proveedor y @OneToMany con DetalleCompra.</p>
+                    <a href="/compras" class="btn-module">
+                        <i class="bi bi-arrow-right-circle"></i> Nueva Compra
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="module-card text-center">
+                    <div class="module-icon">
+                        <i class="bi bi-cash-coin"></i>
+                    </div>
+                    <h3>Ventas</h3>
+                    <p>Registra ventas a clientes. Relación @ManyToOne con Cliente y @OneToMany con DetalleVenta.</p>
+                    <a href="/ventas" class="btn-module">
+                        <i class="bi bi-arrow-right-circle"></i> Nueva Venta
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <h4><i class="bi bi-star-fill"></i> Características del Sistema</h4>
+            <ul>
+                <li><i class="bi bi-check-circle-fill"></i> <strong>@OneToMany:</strong> Cliente → Ventas, Proveedor → Compras</li>
+                <li><i class="bi bi-check-circle-fill"></i> <strong>@ManyToOne:</strong> Compra → Proveedor, Venta → Cliente</li>
+                <li><i class="bi bi-check-circle-fill"></i> <strong>@OneToMany bidireccional:</strong> Compra/Venta ↔ Detalles</li>
+                <li><i class="bi bi-check-circle-fill"></i> <strong>Cascade:</strong> Operaciones en cascada para detalles</li>
+                <li><i class="bi bi-check-circle-fill"></i> <strong>Fetch:</strong> Lazy loading para optimización</li>
+                <li><i class="bi bi-check-circle-fill"></i> <strong>Base de datos H2:</strong> Fácilmente migrable a MySQL</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

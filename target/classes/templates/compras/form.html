@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Compra - Sistema POS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: #ffffff;
+        }
+        .navbar {
+            background: #2c438f !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #e0e0e0 !important;
+        }
+        .card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        .card-header {
+            background: #2c438f;
+            color: white;
+            border-radius: 8px 8px 0 0 !important;
+            padding: 20px;
+        }
+        .btn-primary {
+            background: #2c438f;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #1f2f6b;
+        }
+        .detalle-row {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-shop"></i> Sistema POS
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clientes"><i class="bi bi-people"></i> Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/proveedores"><i class="bi bi-truck"></i> Proveedores</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/productos"><i class="bi bi-box-seam"></i> Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/compras"><i class="bi bi-cart-plus"></i> Compras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ventas"><i class="bi bi-cash-coin"></i> Ventas</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="bi bi-cart-plus"></i> Nueva Compra</h3>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/compras/guardar}" method="post">
+                    <div class="mb-3">
+                        <label for="proveedor" class="form-label">Proveedor *</label>
+                        <select class="form-select" id="proveedor" name="proveedor.id" required>
+                            <option value="">Seleccione un proveedor</option>
+                            <option th:each="proveedor : ${proveedores}" 
+                                    th:value="${proveedor.id}" 
+                                    th:text="${proveedor.nombre + ' - ' + proveedor.nit}">
+                            </option>
+                        </select>
+                    </div>
+                    
+                    <hr>
+                    <h5><i class="bi bi-list-ul"></i> Productos</h5>
+                    
+                    <div id="detalles-container">
+                        <div class="detalle-row">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label class="form-label">Producto</label>
+                                    <select class="form-select producto-select" name="productoIds">
+                                        <option value="">Seleccione un producto</option>
+                                        <option th:each="producto : ${productos}" 
+                                                th:value="${producto.id}" 
+                                                th:text="${producto.codigo + ' - ' + producto.nombre}"
+                                                th:attr="data-precio=${producto.precioCompra}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Cantidad</label>
+                                    <input type="number" class="form-control cantidad-input" name="cantidades" min="1" value="1">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Precio Unitario</label>
+                                    <input type="number" step="0.01" class="form-control precio-input" name="precios" value="0">
+                                </div>
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="removeDetalle(this)">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-success btn-sm mb-3" onclick="addDetalle()">
+                        <i class="bi bi-plus-circle"></i> Agregar Producto
+                    </button>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="/compras" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Guardar Compra
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function addDetalle() {
+            const container = document.getElementById('detalles-container');
+            const firstDetalle = container.querySelector('.detalle-row');
+            const newDetalle = firstDetalle.cloneNode(true);
+            
+            newDetalle.querySelectorAll('select, input').forEach(input => {
+                if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                } else {
+                    input.value = input.name === 'cantidades' ? '1' : '0';
+                }
+            });
+            
+            container.appendChild(newDetalle);
+            attachProductoChangeEvent(newDetalle.querySelector('.producto-select'));
+        }
+        
+        function removeDetalle(button) {
+            const container = document.getElementById('detalles-container');
+            if (container.querySelectorAll('.detalle-row').length > 1) {
+                button.closest('.detalle-row').remove();
+            } else {
+                alert('Debe mantener al menos un producto');
+            }
+        }
+        
+        function attachProductoChangeEvent(select) {
+            select.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const precio = selectedOption.getAttribute('data-precio');
+                const precioInput = this.closest('.detalle-row').querySelector('.precio-input');
+                if (precio) {
+                    precioInput.value = precio;
+                }
+            });
+        }
+        
+        document.querySelectorAll('.producto-select').forEach(select => {
+            attachProductoChangeEvent(select);
+        });
+    </script>
+</body>
+</html>
