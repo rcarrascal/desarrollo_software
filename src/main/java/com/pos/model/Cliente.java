@@ -22,7 +22,7 @@ public class Cliente {
     private Long id;
     
     @NotBlank(message = "El nombre es obligatorio")
-    @Column(nullable = false)
+    @Column(nullable = false,name = "nombre")
     private String nombre;
     
     @NotBlank(message = "El documento es obligatorio")
